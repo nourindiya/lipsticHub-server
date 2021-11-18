@@ -112,6 +112,33 @@ async function run() {
         });
 
 
+        app.get('/users', async (req, res) => {
+            const email = req.query.email;
+            const query = { email: email };
+            const user = await userCollection.findOne(query);
+            res.send(user);
+        });
+
+
+        // Add Products
+        app.post('/products', async (req, res) => {
+            const product = req.body;
+            const result = await productsCollection.insertOne(product);
+            res.send(result);
+        });
+
+
+        // make Admin
+        app.put('/users/admin', async (req, res) => {
+            const email = req.body.email;
+            const filter = { email: email };
+            const updateDoc = { $set: { role: 'admin' } };
+            const result = await userCollection.updateOne(filter, updateDoc);
+            res.json(result);
+        });
+
+
+
 
     }
     finally {
