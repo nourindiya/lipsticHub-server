@@ -23,6 +23,7 @@ async function run() {
         const productsCollection = database.collection("products")
         const reviewsCollection = database.collection("reviews")
         const ordersCollection = database.collection("orders")
+        const userCollection = database.collection("users")
 
 
 
@@ -60,9 +61,20 @@ async function run() {
         app.post('/orders', async (req, res) => {
             const order = req.body;
             const result = await ordersCollection.insertOne(order)
-            // console.log(result);
+            console.log(result);
             res.json(result);
         });
+
+
+
+        //Register
+        app.post('/users', async (req, res) => {
+            const user = req.body;
+            // console.log(user);
+            const result = await userCollection.insertOne(user);
+            res.send(result);
+        });
+
 
 
     }
