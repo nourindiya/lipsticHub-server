@@ -48,6 +48,28 @@ async function run() {
             res.send(reviews);
         });
 
+
+        app.put('/reviews', async (req, res) => {
+            const description = req.body.description;
+            const name = req.body.name;
+            const email = req.query.email;
+
+            const filter = { email: email };
+            const options = { upsert: true };
+
+            const updateDoc = {
+                $set: {
+                    description: description,
+                    name: name
+                }
+            }
+            const result = await reviewsCollection.updateOne(filter, updateDoc, options)
+            res.send(result);
+        });
+
+
+
+
         // booking
         app.get('/booking/:id', async (req, res) => {
             const id = req.params.id;
@@ -57,7 +79,7 @@ async function run() {
         });
 
 
-
+        // orders
         app.post('/orders', async (req, res) => {
             const order = req.body;
             const result = await ordersCollection.insertOne(order)
@@ -65,6 +87,12 @@ async function run() {
             res.json(result);
         });
 
+
+        app.get('/orders', async (req, res) => {
+            const cursor = ordersCollection.find({}).sort({ _id: -1 });
+            const orders = await cursor.toArray();
+            res.send(orders);
+        });
 
 
         //Register
